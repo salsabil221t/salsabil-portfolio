@@ -1,26 +1,447 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ---------------------------------- */
+/* Brand palette                       */
+/*  navy  #283593                      */
+/*  blue  #4272D7                      */
+/*  sky   #92CBDD                      */
+/*  mint  #D0E6E3                      */
+/* ---------------------------------- */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy: #283593;
+  --blue: #4272d7;
+  --sky: #92cbdd;
+  --mint: #d0e6e3;
+
+  --background: #f6fbfa;
+  --foreground: #1c2452;
+  --card: #ffffff;
+  --card-foreground: #1c2452;
+  --primary: #283593;
+  --primary-foreground: #f6fbfa;
+  --secondary: #d0e6e3;
+  --secondary-foreground: #1c2452;
+  --muted: #e3f0ee;
+  --muted-foreground: #4a5578;
+  --accent: #4272d7;
+  --accent-foreground: #ffffff;
+  --border: #c3dcd8;
+  --input: #c3dcd8;
+  --ring: #4272d7;
+}
+
+.dark {
+  --background: #0a0e24;
+  --foreground: #e8f4f2;
+  --card: #121737;
+  --card-foreground: #e8f4f2;
+  --primary: #92cbdd;
+  --primary-foreground: #0a0e24;
+  --secondary: #1c2452;
+  --secondary-foreground: #d0e6e3;
+  --muted: #161c42;
+  --muted-foreground: #9fb2c8;
+  --accent: #4272d7;
+  --accent-foreground: #ffffff;
+  --border: #232b5c;
+  --input: #232b5c;
+  --ring: #92cbdd;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-navy: var(--navy);
+  --color-blue: var(--blue);
+  --color-sky: var(--sky);
+  --color-mint: var(--mint);
+  --font-sans: var(--font-cairo), var(--font-geist-sans), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-cairo), var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* ---------------------------------- */
+/* Keyframes (hero 3D animation)       */
+/* ---------------------------------- */
+
+@keyframes left {
+  100% {
+    margin-left: -54000px;
+  }
+}
+
+@keyframes back {
+  100% {
+    margin-left: -54870px;
+  }
+}
+
+@keyframes right {
+  100% {
+    margin-left: -55740px;
+  }
+}
+
+@keyframes filter-animation {
+  0%,
+  100% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(100deg);
+  }
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(2.5);
+  }
+}
+
+@keyframes blur {
+  0% {
+    filter: blur(0px);
+  }
+  100% {
+    filter: blur(3px);
+  }
+}
+
+@keyframes brightness {
+  0% {
+    filter: brightness(1) contrast(1);
+  }
+  100% {
+    filter: brightness(0.8) contrast(1.3);
+  }
+}
+
+@keyframes text-glow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+  }
+}
+
+@keyframes cube-spin {
+  0% {
+    transform: rotateX(-12deg) rotateY(0deg);
+  }
+  100% {
+    transform: rotateX(-12deg) rotateY(360deg);
+  }
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes girl-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 14px rgba(146, 203, 221, 0.35));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(66, 114, 215, 0.55));
+  }
+}
+
+/* ---------------------------------- */
+/* Hero 3D animation section           */
+/* ---------------------------------- */
+
+.hero-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-height: 100svh;
+  background: linear-gradient(180deg, var(--navy) 0%, var(--blue) 46%, var(--sky) 78%, var(--mint) 100%);
+}
+
+.dark .hero-section {
+  background: linear-gradient(180deg, #070a1c 0%, var(--navy) 55%, var(--blue) 100%);
+}
+
+.hero-section > .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.hero-section .content {
+  position: relative;
+  transform-origin: center center;
+}
+
+.hero-section .container-full {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 28px;
+  box-shadow: 0 40px 120px -20px rgba(10, 14, 36, 0.55);
+}
+
+/* animated hue overlay */
+.hero-section .animated.hue {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background: radial-gradient(
+      55% 60% at 70% 30%,
+      rgba(66, 114, 215, 0.35) 0%,
+      transparent 70%
+    ),
+    radial-gradient(45% 55% at 25% 75%, rgba(146, 203, 221, 0.3) 0%, transparent 70%);
+  animation: filter-animation 16s ease-in-out infinite;
+  mix-blend-mode: screen;
+}
+
+.hero-section .backgroundImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  animation: zoom-in 45s ease-in-out infinite alternate,
+    brightness 18s ease-in-out infinite alternate;
+}
+
+.hero-section .girlImage {
+  position: absolute;
+  bottom: 0;
+  right: 6%;
+  height: 86%;
+  z-index: 4;
+  animation: float-slow 7s ease-in-out infinite, girl-glow 9s ease-in-out infinite;
+}
+
+[dir="rtl"] .hero-section .girlImage {
+  right: auto;
+  left: 6%;
+}
+
+/* -- 3D cube ----------------------- */
+
+.hero-section .container-full > .container,
+.hero-section .container-reflect {
+  position: absolute;
+  left: 10%;
+  top: 26%;
+  width: 340px;
+  height: 340px;
+  perspective: 1400px;
+  z-index: 2;
+}
+
+[dir="rtl"] .hero-section .container-full > .container,
+[dir="rtl"] .hero-section .container-reflect {
+  left: auto;
+  right: 10%;
+}
+
+.hero-section .container-reflect {
+  top: auto;
+  bottom: -46%;
+  transform: scaleY(-1);
+  opacity: 0.22;
+  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 75%);
+  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 75%);
+}
+
+.hero-section .cube {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: cube-spin 36s linear infinite;
+}
+
+.hero-section .face {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(146, 203, 221, 0.35);
+  background: linear-gradient(
+    135deg,
+    rgba(40, 53, 147, 0.55),
+    rgba(66, 114, 215, 0.28)
+  );
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+  backface-visibility: hidden;
+}
+
+.hero-section .face.front {
+  transform: translateZ(170px);
+  background: linear-gradient(135deg, rgba(146, 203, 221, 0.16), rgba(40, 53, 147, 0.4));
+}
+
+.hero-section .face.back {
+  transform: rotateY(180deg) translateZ(170px);
+}
+
+.hero-section .face.left {
+  transform: rotateY(-90deg) translateZ(170px);
+}
+
+.hero-section .face.right {
+  transform: rotateY(90deg) translateZ(170px);
+}
+
+.hero-section .face.top {
+  transform: rotateX(90deg) translateZ(170px);
+  background: linear-gradient(135deg, rgba(208, 230, 227, 0.35), rgba(146, 203, 221, 0.15));
+}
+
+.hero-section .face.bottom {
+  transform: rotateX(-90deg) translateZ(170px);
+  background: rgba(10, 14, 36, 0.5);
+}
+
+/* scrolling text on cube faces */
+.hero-section .face.text {
+  display: flex;
+  align-items: center;
+}
+
+.hero-section .face.text p {
+  white-space: nowrap;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1;
+  color: rgba(232, 244, 242, 0.9);
+  animation: text-glow 6s ease-in-out infinite;
+  will-change: margin-left;
+}
+
+.hero-section .face.text p span {
+  color: var(--sky);
+  font-weight: 800;
+}
+
+.hero-section .face.left p {
+  animation: left 600s linear infinite, text-glow 6s ease-in-out infinite;
+}
+
+.hero-section .face.right p {
+  animation: right 620s linear infinite, text-glow 6s ease-in-out infinite;
+}
+
+.hero-section .face.back p {
+  animation: back 610s linear infinite, text-glow 6s ease-in-out infinite;
+}
+
+/* hero overlay copy (name + CTAs) */
+.hero-section .hero-copy {
+  position: absolute;
+  z-index: 5;
+  inset-inline-start: 6%;
+  bottom: 7%;
+  max-width: 560px;
+  border-radius: 24px;
+  border: 1px solid rgba(146, 203, 221, 0.25);
+  background: linear-gradient(
+    135deg,
+    rgba(10, 14, 36, 0.55),
+    rgba(40, 53, 147, 0.45)
+  );
+  backdrop-filter: blur(14px);
+  padding: 28px 32px;
+  box-shadow: 0 24px 60px -20px rgba(10, 14, 36, 0.6);
+}
+
+@media (max-width: 720px) {
+  /* full-bleed hero instead of scaling everything down */
+  .hero-section .content {
+    width: 100vw !important;
+    height: 100svh !important;
+    transform: none !important;
+  }
+
+  .hero-section .container-full {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .hero-section .container-full > .container,
+  .hero-section .container-reflect {
+    left: calc(50% - 170px) !important;
+    right: auto !important;
+    top: 12%;
+  }
+
+  .hero-section .container-reflect {
+    top: auto;
+    bottom: -30%;
+  }
+
+  .hero-section .hero-copy {
+    inset-inline-start: auto;
+    left: 50%;
+    right: auto;
+    translate: -50% 0;
+    width: 88%;
+    text-align: center;
+    bottom: 6%;
+    padding: 22px 20px;
+  }
+
+  .hero-section .girlImage {
+    height: 62%;
+    right: 50%;
+    translate: 50% 0;
+    opacity: 0.55;
+  }
+
+  [dir="rtl"] .hero-section .girlImage {
+    left: 50%;
+    right: auto;
+    translate: -50% 0;
+  }
 }

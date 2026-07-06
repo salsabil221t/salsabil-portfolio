@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# بورتفوليو سلسبيل · Salsabil Portfolio
 
-## Getting Started
+لاندنج بيدج شخصية (عربي/إنجليزي، لايت/دارك) مع لوحة تحكم لتعديل كل المحتوى بدون كود.
 
-First, run the development server:
+**التقنيات:** Next.js 16 · TypeScript · Tailwind CSS 4 · framer-motion · هيكلة shadcn (`components/ui`)
+
+## التشغيل محليًا
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- الموقع: http://localhost:3000
+- لوحة التحكم: http://localhost:3000/admin — كلمة المرور الافتراضية `admin123` (من ملف `.env.local`)
+- محليًا تُحفظ التعديلات في `content/site-content.json`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## لوحة التحكم
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+من `/admin` تقدرين تعديلين:
 
-## Learn More
+- **الهيرو**: الاسم، التحية، الوصف، نص المكعب المتحرك (ضعي الكلمة بين نجمتين `*هكذا*` لتظهر مضيئة)، الأزرار، صورة البنت والخلفية
+- **عني**: النبذة والنقاط المميزة
+- **المهارات**: إضافة/حذف مهارات مع نسبة لكل مهارة
+- **الأعمال**: إضافة/حذف مشاريع (عنوان، وصف، رابط، وسوم)
+- **التواصل**: الإيميل وروابط السوشيال ميديا
 
-To learn more about Next.js, take a look at the following resources:
+كل حقل له نسختان: عربي وإنجليزي.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## النشر على Vercel وربط الدومين
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. ارفعي المشروع على GitHub ثم استوردينه في [vercel.com](https://vercel.com) (أو استخدمي `npx vercel`).
+2. من إعدادات المشروع في Vercel → **Storage** → أضيفي **Upstash Redis** (مجاني) — سيضيف متغيرات `UPSTASH_REDIS_REST_URL` و`UPSTASH_REDIS_REST_TOKEN` تلقائيًا.
+3. من **Settings → Environment Variables** أضيفي:
+   - `ADMIN_PASSWORD` — كلمة مرور قوية للوحة التحكم (**إلزامي**)
+   - `AUTH_SECRET` — نص عشوائي طويل (اختياري لكن مُفضّل)
+4. أعيدي النشر (Redeploy)، وبعدها أي تعديل من `/admin` يظهر مباشرة على الموقع.
+5. **ربط الدومين**: من **Settings → Domains** أضيفي الدومين، ثم عند مزوّد الدومين وجّهي:
+   - سجل `A` إلى `76.76.21.21`
+   - أو سجل `CNAME` إلى `cname.vercel-dns.com`
 
-## Deploy on Vercel
+## متغيرات البيئة
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+انظري `.env.example` — انسخيه إلى `.env.local` وعدّلي القيم.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| المتغير | الوصف |
+|---|---|
+| `ADMIN_PASSWORD` | كلمة مرور لوحة التحكم |
+| `AUTH_SECRET` | سر توقيع جلسات الدخول |
+| `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | قاعدة البيانات السحابية (بدونها يُستخدم ملف محلي) |
