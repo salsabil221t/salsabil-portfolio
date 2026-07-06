@@ -26,6 +26,7 @@ export function LandingPage({ content }: { content: SiteContent }) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.3 }}
+          className="flex flex-col items-center"
         >
           <p className="mb-1 text-lg font-medium text-mint/90">
             {t(content.hero.greeting)}
@@ -34,10 +35,10 @@ export function LandingPage({ content }: { content: SiteContent }) {
             {t(content.hero.name)}
             <span className="text-sky">.</span>
           </h1>
-          <p className="mb-6 max-w-md text-lg leading-relaxed text-white/85">
+          <p className="mb-6 max-w-xl text-lg leading-relaxed text-white/85">
             {t(content.hero.tagline)}
           </p>
-          <div className="flex flex-wrap items-center gap-3 max-md:justify-center">
+          <div className="flex flex-wrap items-center justify-center gap-3">
             <a href="#projects">
               <Button variant="solid" size="lg" className="font-semibold">
                 {t(content.hero.ctaPrimary)}

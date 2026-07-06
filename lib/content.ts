@@ -63,7 +63,9 @@ export function poemToHTML(poem: string): string {
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;");
   const withSpans = escaped.replace(/\*([^*]+)\*/g, "<span>$1</span>");
-  return `<p>${withSpans}</p>`;
+  // Two identical halves + translateX(-50%) = a seamless marquee loop.
+  const half = `${withSpans}  •  `;
+  return `<p>${half}${half}</p>`;
 }
 
 export const defaultContent: SiteContent = {

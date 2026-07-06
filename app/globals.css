@@ -93,21 +93,23 @@ body {
 /* Keyframes (hero 3D animation)       */
 /* ---------------------------------- */
 
+/* Walls scroll via transform (GPU-only) — the text holds two identical
+   halves, so -50% loops seamlessly. */
 @keyframes left {
   100% {
-    margin-left: -54000px;
+    transform: translateX(-50%);
   }
 }
 
 @keyframes back {
   100% {
-    margin-left: -54870px;
+    transform: translateX(-50%);
   }
 }
 
 @keyframes right {
   100% {
-    margin-left: -55740px;
+    transform: translateX(-50%);
   }
 }
 
@@ -158,87 +160,69 @@ body {
   }
 }
 
-@keyframes cube-spin {
-  0% {
-    transform: rotateX(-12deg) rotateY(0deg);
-  }
-  100% {
-    transform: rotateX(-12deg) rotateY(360deg);
-  }
-}
-
-@keyframes float-slow {
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-14px);
-  }
-}
-
 @keyframes girl-glow {
   0%,
   100% {
-    filter: drop-shadow(0 0 14px rgba(146, 203, 221, 0.35));
+    filter: drop-shadow(0 0 14px rgba(146, 203, 221, 0.3));
   }
   50% {
-    filter: drop-shadow(0 0 30px rgba(66, 114, 215, 0.55));
+    filter: drop-shadow(0 0 28px rgba(66, 114, 215, 0.5));
   }
 }
 
 /* ---------------------------------- */
-/* Hero 3D animation section           */
+/* Hero: 3D room seen from the inside  */
 /* ---------------------------------- */
 
 .hero-section {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 32px;
   overflow: hidden;
   min-height: 100svh;
-  background: linear-gradient(180deg, var(--navy) 0%, var(--blue) 46%, var(--sky) 78%, var(--mint) 100%);
-}
-
-.dark .hero-section {
-  background: linear-gradient(180deg, #070a1c 0%, var(--navy) 55%, var(--blue) 100%);
-}
-
-.hero-section > .container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  padding: 88px 16px 56px;
+  background: radial-gradient(
+    120% 90% at 50% 0%,
+    #121735 0%,
+    #060814 55%,
+    #020308 100%
+  );
 }
 
 .hero-section .content {
   position: relative;
-  transform-origin: center center;
+  flex-shrink: 0;
 }
 
+/* the framed scene — its hue slowly shifts (blue → purple → pink).
+   The 3D scene lives fully inside .container, so filtering here is safe. */
 .hero-section .container-full {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 28px;
-  box-shadow: 0 40px 120px -20px rgba(10, 14, 36, 0.55);
+  border-radius: 26px;
+  background: #020308;
+  box-shadow: 0 40px 140px -30px rgba(40, 53, 147, 0.55),
+    0 0 0 1px rgba(146, 203, 221, 0.08);
+  animation: filter-animation 26s ease-in-out infinite;
 }
 
-/* animated hue overlay */
+/* soft light bloom over the scene */
 .hero-section .animated.hue {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 9;
   pointer-events: none;
   background: radial-gradient(
-      55% 60% at 70% 30%,
-      rgba(66, 114, 215, 0.35) 0%,
+      70% 55% at 50% 38%,
+      rgba(150, 170, 255, 0.14) 0%,
       transparent 70%
     ),
-    radial-gradient(45% 55% at 25% 75%, rgba(146, 203, 221, 0.3) 0%, transparent 70%);
-  animation: filter-animation 16s ease-in-out infinite;
+    radial-gradient(120% 45% at 50% 108%, rgba(6, 8, 20, 0.8) 0%, transparent 60%);
   mix-blend-mode: screen;
 }
 
@@ -248,103 +232,145 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  z-index: 1;
+  z-index: 0;
+  opacity: 0.4;
   animation: zoom-in 45s ease-in-out infinite alternate,
     brightness 18s ease-in-out infinite alternate;
 }
 
+/* girl silhouette standing inside the room */
 .hero-section .girlImage {
   position: absolute;
-  bottom: 0;
-  right: 6%;
-  height: 86%;
-  z-index: 4;
-  animation: float-slow 7s ease-in-out infinite, girl-glow 9s ease-in-out infinite;
+  bottom: 3%;
+  left: 50%;
+  translate: -50% 0;
+  height: 56%;
+  z-index: 8;
+  animation: girl-glow 9s ease-in-out infinite;
 }
 
-[dir="rtl"] .hero-section .girlImage {
-  right: auto;
-  left: 6%;
-}
-
-/* -- 3D cube ----------------------- */
+/* -- the room ----------------------- */
+/* Viewer stands inside a 1000×562×1000 box. Walls carry the scrolling
+   text, the ceiling holds neon frames, the floor is translucent so the
+   mirrored copy underneath (.container-reflect) reads as a reflection. */
 
 .hero-section .container-full > .container,
 .hero-section .container-reflect {
   position: absolute;
-  left: 10%;
-  top: 26%;
-  width: 340px;
-  height: 340px;
-  perspective: 1400px;
+  inset: 0;
+  perspective: 520px;
+  perspective-origin: 50% 46%;
   z-index: 2;
 }
 
-[dir="rtl"] .hero-section .container-full > .container,
-[dir="rtl"] .hero-section .container-reflect {
-  left: auto;
-  right: 10%;
-}
-
+/* a mirrored copy would be the physically-correct reflection, but it costs
+   a full extra scene and fogs the render — the floor fakes it instead */
 .hero-section .container-reflect {
-  top: auto;
-  bottom: -46%;
-  transform: scaleY(-1);
-  opacity: 0.22;
-  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 75%);
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent 75%);
+  display: none;
 }
 
 .hero-section .cube {
-  position: relative;
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 0;
   transform-style: preserve-3d;
-  animation: cube-spin 36s linear infinite;
 }
 
 .hero-section .face {
   position: absolute;
   inset: 0;
-  border: 1px solid rgba(146, 203, 221, 0.35);
-  background: linear-gradient(
-    135deg,
-    rgba(40, 53, 147, 0.55),
-    rgba(66, 114, 215, 0.28)
-  );
-  backdrop-filter: blur(2px);
   overflow: hidden;
-  backface-visibility: hidden;
 }
 
 .hero-section .face.front {
-  transform: translateZ(170px);
-  background: linear-gradient(135deg, rgba(146, 203, 221, 0.16), rgba(40, 53, 147, 0.4));
+  display: none;
+}
+
+/* walls */
+.hero-section .face.back,
+.hero-section .face.left,
+.hero-section .face.right {
+  background: linear-gradient(
+    180deg,
+    #05060f 0%,
+    #6a77c4 14%,
+    #ccd5fb 38%,
+    #e4e9fe 52%,
+    #ccd5fb 66%,
+    #5b68b5 86%,
+    #04050d 100%
+  );
 }
 
 .hero-section .face.back {
-  transform: rotateY(180deg) translateZ(170px);
+  transform: translateZ(-500px);
 }
 
 .hero-section .face.left {
-  transform: rotateY(-90deg) translateZ(170px);
+  transform: rotateY(90deg) translateZ(-500px);
 }
 
 .hero-section .face.right {
-  transform: rotateY(90deg) translateZ(170px);
+  transform: rotateY(-90deg) translateZ(-500px);
+}
+
+/* ceiling: dark with nested neon light frames */
+.hero-section .face.top,
+.hero-section .face.bottom {
+  inset: auto 0;
+  top: 50%;
+  height: 1000px;
+  margin-top: -500px;
 }
 
 .hero-section .face.top {
-  transform: rotateX(90deg) translateZ(170px);
-  background: linear-gradient(135deg, rgba(208, 230, 227, 0.35), rgba(146, 203, 221, 0.15));
+  transform: rotateX(-90deg) translateZ(-281px);
+  background: radial-gradient(
+      55% 55% at 50% 50%,
+      rgba(125, 145, 230, 0.16) 0%,
+      transparent 70%
+    ),
+    #05060f;
+  border: 3px solid rgba(214, 222, 255, 0.9);
+  box-shadow: 0 0 34px rgba(150, 170, 255, 0.75),
+    inset 0 0 34px rgba(150, 170, 255, 0.45);
 }
 
+.hero-section .face.top::before,
+.hero-section .face.top::after {
+  content: "";
+  position: absolute;
+  border: 3px solid rgba(214, 222, 255, 0.85);
+  box-shadow: 0 0 30px rgba(150, 170, 255, 0.7),
+    inset 0 0 30px rgba(150, 170, 255, 0.4);
+}
+
+.hero-section .face.top::before {
+  inset: 110px 90px;
+}
+
+.hero-section .face.top::after {
+  inset: 235px 195px;
+}
+
+/* floor: dark and glossy — bright at the far seam, fading toward the
+   viewer, like the walls' glow washing over polished ground */
 .hero-section .face.bottom {
-  transform: rotateX(-90deg) translateZ(170px);
-  background: rgba(10, 14, 36, 0.5);
+  transform: rotateX(90deg) translateZ(-281px);
+  background: radial-gradient(
+      42% 30% at 50% 8%,
+      rgba(190, 205, 255, 0.5) 0%,
+      transparent 75%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(150, 165, 240, 0.38) 0%,
+      rgba(70, 82, 160, 0.16) 22%,
+      rgba(6, 8, 20, 0.92) 58%,
+      #020308 100%
+    );
 }
 
-/* scrolling text on cube faces */
+/* scrolling giant text on the walls */
 .hero-section .face.text {
   display: flex;
   align-items: center;
@@ -352,96 +378,66 @@ body {
 
 .hero-section .face.text p {
   white-space: nowrap;
-  font-size: 34px;
-  font-weight: 600;
+  font-size: 190px;
+  font-weight: 700;
   line-height: 1;
-  color: rgba(232, 244, 242, 0.9);
-  animation: text-glow 6s ease-in-out infinite;
-  will-change: margin-left;
+  letter-spacing: 0.01em;
+  color: rgba(94, 102, 134, 0.85);
 }
 
 .hero-section .face.text p span {
-  color: var(--sky);
+  color: #e0335c;
   font-weight: 800;
+  text-shadow: 0 0 26px rgba(224, 51, 92, 0.5);
 }
 
 .hero-section .face.left p {
-  animation: left 600s linear infinite, text-glow 6s ease-in-out infinite;
+  animation: left 150s linear infinite;
 }
 
 .hero-section .face.right p {
-  animation: right 620s linear infinite, text-glow 6s ease-in-out infinite;
+  animation: right 156s linear infinite;
 }
 
 .hero-section .face.back p {
-  animation: back 610s linear infinite, text-glow 6s ease-in-out infinite;
+  animation: back 153s linear infinite;
 }
 
-/* hero overlay copy (name + CTAs) */
+/* In RTL the text overflows to the left of the wall, so it must travel
+   right (+50%) or the walls empty out. */
+@keyframes wall-scroll-rtl {
+  100% {
+    transform: translateX(50%);
+  }
+}
+
+[dir="rtl"] .hero-section .face.left p {
+  animation: wall-scroll-rtl 150s linear infinite;
+}
+
+[dir="rtl"] .hero-section .face.right p {
+  animation: wall-scroll-rtl 156s linear infinite;
+}
+
+[dir="rtl"] .hero-section .face.back p {
+  animation: wall-scroll-rtl 153s linear infinite;
+}
+
+/* hero copy below the scene */
 .hero-section .hero-copy {
-  position: absolute;
+  position: relative;
   z-index: 5;
-  inset-inline-start: 6%;
-  bottom: 7%;
-  max-width: 560px;
-  border-radius: 24px;
-  border: 1px solid rgba(146, 203, 221, 0.25);
-  background: linear-gradient(
-    135deg,
-    rgba(10, 14, 36, 0.55),
-    rgba(40, 53, 147, 0.45)
-  );
-  backdrop-filter: blur(14px);
-  padding: 28px 32px;
-  box-shadow: 0 24px 60px -20px rgba(10, 14, 36, 0.6);
+  max-width: 720px;
+  text-align: center;
 }
 
 @media (max-width: 720px) {
-  /* full-bleed hero instead of scaling everything down */
-  .hero-section .content {
-    width: 100vw !important;
-    height: 100svh !important;
-    transform: none !important;
-  }
-
-  .hero-section .container-full {
-    border-radius: 0;
-    box-shadow: none;
-  }
-
-  .hero-section .container-full > .container,
-  .hero-section .container-reflect {
-    left: calc(50% - 170px) !important;
-    right: auto !important;
-    top: 12%;
-  }
-
-  .hero-section .container-reflect {
-    top: auto;
-    bottom: -30%;
-  }
-
-  .hero-section .hero-copy {
-    inset-inline-start: auto;
-    left: 50%;
-    right: auto;
-    translate: -50% 0;
-    width: 88%;
-    text-align: center;
-    bottom: 6%;
-    padding: 22px 20px;
+  .hero-section {
+    gap: 28px;
+    padding: 88px 12px 56px;
   }
 
   .hero-section .girlImage {
-    height: 62%;
-    right: 50%;
-    translate: 50% 0;
-    opacity: 0.55;
-  }
-
-  [dir="rtl"] .hero-section .girlImage {
-    left: 50%;
-    right: auto;
-    translate: -50% 0;
+    height: 60%;
   }
 }
