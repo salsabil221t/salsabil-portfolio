@@ -15,7 +15,7 @@ export function GalleryScene({ content }: { content: SiteContent }) {
   const ref = useRef<HTMLDivElement>(null);
   const scrollYProgress = useSceneProgress(ref);
 
-  const assemble = useTransform(scrollYProgress, [0.04, 0.78], [0, 1]);
+  const assemble = useTransform(scrollYProgress, [0.02, 0.7], [0, 1]);
   const fadeOut = useTransform(scrollYProgress, [0.9, 1], [1, 0]);
   const headingOpacity = useTransform(scrollYProgress, [0, 0.06], [0, 1]);
 

@@ -28,7 +28,7 @@ export function LandingPage({ content }: { content: SiteContent }) {
       {/* Contact */}
       <section
         id="contact"
-        className="relative scroll-mt-24 bg-gradient-to-b from-navy to-blue py-24 text-white"
+        className="relative scroll-mt-24 bg-gradient-to-b from-background via-navy to-blue pt-40 pb-24 text-white"
       >
         <div className="mx-auto max-w-3xl px-4 text-center">
           <Reveal>

@@ -26,7 +26,7 @@ function SkillCard({
   isLast: boolean;
   label: string;
 }) {
-  const opacity = useTransform(progress, [start, start + width * 0.35], [0, 1]);
+  const appear = useTransform(progress, [start, start + width * 0.35], [0, 1]);
   const y = useTransform(progress, [start, start + width * 0.35], [50, 0]);
 
   // the card "fills up" to the skill's percentage
@@ -41,7 +41,9 @@ function SkillCard({
   const [counter, setCounter] = useState(0);
   useMotionValueEvent(fill, "change", (v) => setCounter(Math.round(v)));
 
-  // the LAST card grows at the end of the scene, opening into the gallery
+  // the LAST card grows at the end of the scene, opening into the gallery;
+  // every OTHER card (and the heading) fades away while it grows, so the
+  // zoom hands off straight to the gallery.
   const grow = useTransform(
     progress,
     isLast ? [0.78, 1] : [0, 1],
@@ -49,14 +51,18 @@ function SkillCard({
   );
   const growFade = useTransform(
     progress,
-    isLast ? [0.9, 0.99] : [0, 1],
-    isLast ? [1, 0] : [1, 1]
+    isLast ? [0.9, 0.99] : [0.78, 0.87],
+    isLast ? [1, 0] : [1, 0]
   );
+  const opacity = useTransform([appear, growFade], (values: number[]) => {
+    const [a, b] = values;
+    return a * b;
+  });
 
   return (
     <motion.div
       style={{
-        opacity: isLast ? growFade : opacity,
+        opacity,
         y,
         scale: grow,
         zIndex: isLast ? 30 : 1,
@@ -91,7 +97,12 @@ export function SkillsScene({ content }: { content: SiteContent }) {
   const bandTotal = 0.62;
   const width = skills.length ? bandTotal / skills.length : bandTotal;
 
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.07], [0, 1]);
+  // fades in at the start, fades away while the last card grows
+  const headingOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.07, 0.78, 0.87],
+    [0, 1, 1, 0]
+  );
   const headingY = useTransform(scrollYProgress, [0, 0.07], [30, 0]);
 
   return (
