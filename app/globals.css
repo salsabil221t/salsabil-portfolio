@@ -238,13 +238,14 @@ body {
     brightness 18s ease-in-out infinite alternate;
 }
 
-/* girl silhouette standing inside the room */
+/* girl illustration standing inside the room (image is cropped at the
+   waist, so it must sit flush with the bottom edge) */
 .hero-section .girlImage {
   position: absolute;
-  bottom: 3%;
+  bottom: 0;
   left: 50%;
   translate: -50% 0;
-  height: 56%;
+  height: 62%;
   z-index: 8;
   animation: girl-glow 9s ease-in-out infinite;
 }
@@ -391,36 +392,42 @@ body {
   text-shadow: 0 0 26px rgba(224, 51, 92, 0.5);
 }
 
-.hero-section .face.left p {
+/* All three walls run the same animation at the same speed; each wall's
+   text is statically offset by one wall-width (1000px) so a letter leaving
+   one wall enters the next at the corner — one continuous ribbon:
+   right wall → back wall → left wall (LTR). */
+.hero-section .face.text p {
   animation: left 150s linear infinite;
 }
 
 .hero-section .face.right p {
-  animation: right 156s linear infinite;
+  margin-left: -2000px;
 }
 
 .hero-section .face.back p {
-  animation: back 153s linear infinite;
+  margin-left: -1000px;
 }
 
-/* In RTL the text overflows to the left of the wall, so it must travel
-   right (+50%) or the walls empty out. */
+/* In RTL the text overflows to the left of the wall and must travel right
+   (+50%) or the walls empty out; the ribbon wraps the other way:
+   left wall → back wall → right wall. */
 @keyframes wall-scroll-rtl {
   100% {
     transform: translateX(50%);
   }
 }
 
-[dir="rtl"] .hero-section .face.left p {
+[dir="rtl"] .hero-section .face.text p {
   animation: wall-scroll-rtl 150s linear infinite;
+  margin-left: 0;
 }
 
-[dir="rtl"] .hero-section .face.right p {
-  animation: wall-scroll-rtl 156s linear infinite;
+[dir="rtl"] .hero-section .face.left p {
+  margin-right: -2000px;
 }
 
 [dir="rtl"] .hero-section .face.back p {
-  animation: wall-scroll-rtl 153s linear infinite;
+  margin-right: -1000px;
 }
 
 /* hero copy below the scene */

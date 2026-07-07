@@ -83,7 +83,7 @@ export const defaultContent: SiteContent = {
     },
     ctaPrimary: { ar: "شاهدي أعمالي", en: "View my work" },
     ctaSecondary: { ar: "تواصلي معي", en: "Get in touch" },
-    girlImageUrl: "/girl-silhouette.svg",
+    girlImageUrl: "/girl-hero.png",
     backgroundImageUrl: "",
   },
   about: {
