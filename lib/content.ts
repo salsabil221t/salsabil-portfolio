@@ -22,10 +22,10 @@ export interface ProjectItem {
 /** Bento-grid span classes per tile size (4 columns on md, 60px rows).
     Base (mobile, 1 column) still needs row spans or tiles collapse to 60px. */
 export const PROJECT_SPANS: Record<ProjectSize, string> = {
-  small: "row-span-3 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-2",
-  tall: "row-span-4 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-3",
-  wide: "row-span-3 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-2",
-  large: "row-span-4 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-3",
+  small: "col-span-1 row-span-2 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-2",
+  tall: "col-span-1 row-span-3 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-3",
+  wide: "col-span-2 row-span-2 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-2",
+  large: "col-span-2 row-span-3 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-3",
 };
 
 export function isVideoUrl(url: string): boolean {

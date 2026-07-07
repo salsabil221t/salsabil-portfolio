@@ -1,12 +1,20 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  type MotionValue,
+} from "framer-motion";
 
 export interface PoemAnimationProps {
   poemHTML: string;
   backgroundImageUrl?: string;
   girlImageUrl?: string;
   children?: React.ReactNode;
+  /** 0→1 scroll progress: zooms into the screen in front of the girl. */
+  zoomProgress?: MotionValue<number>;
 }
 
 const BASE_WIDTH = 1000;
@@ -23,8 +31,15 @@ export const PoemAnimation = ({
   backgroundImageUrl,
   girlImageUrl,
   children,
+  zoomProgress,
 }: PoemAnimationProps) => {
   const contentRef = useRef<HTMLDivElement>(null);
+
+  // Scroll-driven zoom into the back wall (the "screen" facing the girl).
+  const stillMV = useMotionValue(0);
+  const zoomMV = zoomProgress ?? stillMV;
+  const zoomScale = useTransform(zoomMV, [0.12, 1], [1, 3.4]);
+  const zoomOpacity = useTransform(zoomMV, [0.72, 0.98], [1, 0]);
 
   // Scale the fixed-size scene to the viewport and collapse the leftover
   // layout height so content below stays snug.
@@ -70,7 +85,7 @@ export const PoemAnimation = ({
   );
 
   return (
-    <header className="hero-section" id="home">
+    <header className="hero-section">
       <div
         ref={contentRef}
         className="content"
@@ -80,7 +95,14 @@ export const PoemAnimation = ({
           transformOrigin: "center top",
         }}
       >
-        <div className="container-full">
+        <motion.div
+          className="container-full"
+          style={{
+            scale: zoomScale,
+            opacity: zoomOpacity,
+            transformOrigin: "50% 42%",
+          }}
+        >
           {backgroundImageUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -109,7 +131,7 @@ export const PoemAnimation = ({
           ) : null}
 
           <div className="animated hue"></div>
-        </div>
+        </motion.div>
       </div>
 
       {children ? <div className="hero-copy">{children}</div> : null}
