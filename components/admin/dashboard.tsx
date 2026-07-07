@@ -12,8 +12,15 @@ import {
   Save,
   Trash2,
 } from "lucide-react";
-import type { Localized, SiteContent } from "@/lib/content";
+import type { Localized, ProjectSize, SiteContent } from "@/lib/content";
 import { cn } from "@/lib/utils";
+
+const PROJECT_SIZE_OPTIONS: { value: ProjectSize; label: string }[] = [
+  { value: "small", label: "صغير (1×2)" },
+  { value: "tall", label: "طويل (1×3)" },
+  { value: "wide", label: "عريض (2×2)" },
+  { value: "large", label: "كبير (2×3)" },
+];
 
 /* ---------- small form primitives ---------- */
 
@@ -432,6 +439,12 @@ export function Dashboard({ initialContent }: { initialContent: SiteContent }) {
                 onChange={(v) => update((d) => (d.projects.heading = v))}
               />
             </Field>
+            <Field label="العنوان الفرعي">
+              <LocalizedInput
+                value={content.projects.subheading}
+                onChange={(v) => update((d) => (d.projects.subheading = v))}
+              />
+            </Field>
             <div className="space-y-4">
               {content.projects.items.map((project, i) => (
                 <div
@@ -466,7 +479,44 @@ export function Dashboard({ initialContent }: { initialContent: SiteContent }) {
                     />
                   </Field>
                   <div className="grid gap-4 md:grid-cols-2">
-                    <Field label="الرابط">
+                    <Field
+                      label="رابط الصورة / الفيديو"
+                      hint="صورة، أو رابط .mp4 لفيديو يتشغّل تلقائيًا"
+                    >
+                      <input
+                        dir="ltr"
+                        value={project.image}
+                        placeholder="https://..."
+                        onChange={(e) =>
+                          update(
+                            (d) => (d.projects.items[i].image = e.target.value)
+                          )
+                        }
+                        className={inputClass}
+                      />
+                    </Field>
+                    <Field label="مقاس القطعة في الجاليري">
+                      <select
+                        value={project.size}
+                        onChange={(e) =>
+                          update(
+                            (d) =>
+                              (d.projects.items[i].size = e.target
+                                .value as ProjectSize)
+                          )
+                        }
+                        className={inputClass}
+                      >
+                        {PROJECT_SIZE_OPTIONS.map((opt) => (
+                          <option key={opt.value} value={opt.value}>
+                            {opt.label}
+                          </option>
+                        ))}
+                      </select>
+                    </Field>
+                  </div>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <Field label="رابط المشروع">
                       <input
                         dir="ltr"
                         value={project.link}
@@ -508,6 +558,8 @@ export function Dashboard({ initialContent }: { initialContent: SiteContent }) {
                       description: { ar: "", en: "" },
                       tags: [],
                       link: "",
+                      image: "",
+                      size: "small",
                     })
                   )
                 }

@@ -7,11 +7,29 @@ export interface SkillItem {
   level: number; // 0-100
 }
 
+export type ProjectSize = "small" | "tall" | "wide" | "large";
+
 export interface ProjectItem {
   title: Localized;
   description: Localized;
   tags: string[];
   link: string;
+  /** Image URL, or a .mp4/.webm URL for video tiles. */
+  image: string;
+  size: ProjectSize;
+}
+
+/** Bento-grid span classes per tile size (4 columns on md, 60px rows).
+    Base (mobile, 1 column) still needs row spans or tiles collapse to 60px. */
+export const PROJECT_SPANS: Record<ProjectSize, string> = {
+  small: "row-span-3 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-2",
+  tall: "row-span-4 sm:col-span-1 sm:row-span-2 md:col-span-1 md:row-span-3",
+  wide: "row-span-3 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-2",
+  large: "row-span-4 sm:col-span-2 sm:row-span-2 md:col-span-2 md:row-span-3",
+};
+
+export function isVideoUrl(url: string): boolean {
+  return /\.(mp4|webm|mov)(\?|#|$)/i.test(url);
 }
 
 export interface SocialLink {
@@ -43,6 +61,7 @@ export interface SiteContent {
   };
   projects: {
     heading: Localized;
+    subheading: Localized;
     items: ProjectItem[];
   };
   contact: {
@@ -109,6 +128,10 @@ export const defaultContent: SiteContent = {
   },
   projects: {
     heading: { ar: "أعمالي", en: "My work" },
+    subheading: {
+      ar: "اسحبي القطع واستكشفي المشاريع — اضغطي على أي عمل لعرضه",
+      en: "Drag the tiles and explore — click any project to view it",
+    },
     items: [
       {
         title: { ar: "مشروع أول", en: "First project" },
@@ -118,6 +141,8 @@ export const defaultContent: SiteContent = {
         },
         tags: ["UI", "Web"],
         link: "#",
+        image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=900&q=80",
+        size: "wide",
       },
       {
         title: { ar: "مشروع ثاني", en: "Second project" },
@@ -127,6 +152,8 @@ export const defaultContent: SiteContent = {
         },
         tags: ["Branding"],
         link: "#",
+        image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=700&q=80",
+        size: "tall",
       },
       {
         title: { ar: "مشروع ثالث", en: "Third project" },
@@ -136,6 +163,41 @@ export const defaultContent: SiteContent = {
         },
         tags: ["UX", "Mobile"],
         link: "#",
+        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=700&q=80",
+        size: "small",
+      },
+      {
+        title: { ar: "مشروع رابع", en: "Fourth project" },
+        description: {
+          ar: "وصف مختصر للمشروع — يمكنك تعديله من لوحة التحكم.",
+          en: "A short project description — editable from the dashboard.",
+        },
+        tags: ["Web"],
+        link: "#",
+        image: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=700&q=80",
+        size: "small",
+      },
+      {
+        title: { ar: "مشروع خامس", en: "Fifth project" },
+        description: {
+          ar: "وصف مختصر للمشروع — يمكنك تعديله من لوحة التحكم.",
+          en: "A short project description — editable from the dashboard.",
+        },
+        tags: ["UI", "Design"],
+        link: "#",
+        image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=900&q=80",
+        size: "large",
+      },
+      {
+        title: { ar: "مشروع سادس", en: "Sixth project" },
+        description: {
+          ar: "وصف مختصر للمشروع — يمكنك تعديله من لوحة التحكم.",
+          en: "A short project description — editable from the dashboard.",
+        },
+        tags: ["Mobile"],
+        link: "#",
+        image: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=700&q=80",
+        size: "tall",
       },
     ],
   },

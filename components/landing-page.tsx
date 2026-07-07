@@ -1,13 +1,19 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowDown, ExternalLink, Mail, Sparkles } from "lucide-react";
+import { ArrowDown, Mail, Sparkles } from "lucide-react";
 import { PoemAnimation } from "@/components/ui/3d-animation";
 import { Button } from "@/components/ui/neon-button";
+import InteractiveBentoGallery from "@/components/ui/interactive-bento-gallery";
 import { Navbar } from "@/components/navbar";
 import { Reveal } from "@/components/reveal";
 import { useLanguage } from "@/lib/i18n";
-import { poemToHTML, type SiteContent } from "@/lib/content";
+import {
+  PROJECT_SPANS,
+  isVideoUrl,
+  poemToHTML,
+  type SiteContent,
+} from "@/lib/content";
 
 export function LandingPage({ content }: { content: SiteContent }) {
   const { t, lang } = useLanguage();
@@ -128,47 +134,23 @@ export function LandingPage({ content }: { content: SiteContent }) {
         </div>
       </section>
 
-      {/* Projects */}
-      <section id="projects" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-24">
-        <Reveal>
-          <h2 className="mb-12 text-center text-3xl font-extrabold md:text-4xl">
-            {t(content.projects.heading)}
-            <span className="text-accent">.</span>
-          </h2>
-        </Reveal>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {content.projects.items.map((project, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <a
-                href={project.link || "#"}
-                target={project.link && project.link !== "#" ? "_blank" : undefined}
-                rel="noreferrer"
-                className="group block h-full rounded-3xl border border-border bg-card p-6 shadow-sm transition-all hover:-translate-y-2 hover:border-accent hover:shadow-xl hover:shadow-accent/10"
-              >
-                <div className="mb-4 flex h-32 items-center justify-center rounded-2xl bg-gradient-to-br from-navy via-blue to-sky text-4xl font-black text-white/90">
-                  {(t(project.title) || "•").charAt(0)}
-                </div>
-                <h3 className="mb-2 flex items-center gap-2 text-xl font-bold">
-                  {t(project.title)}
-                  <ExternalLink className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
-                </h3>
-                <p className="mb-4 text-sm leading-relaxed text-muted-foreground">
-                  {t(project.description)}
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {project.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-secondary px-3 py-1 text-xs font-semibold text-secondary-foreground"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </a>
-            </Reveal>
-          ))}
-        </div>
+      {/* Projects — interactive bento gallery */}
+      <section id="projects" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16">
+        <InteractiveBentoGallery
+          title={t(content.projects.heading)}
+          description={t(content.projects.subheading)}
+          linkLabel={lang === "ar" ? "زيارة المشروع" : "Visit project"}
+          mediaItems={content.projects.items.map((project, i) => ({
+            id: i + 1,
+            type: isVideoUrl(project.image || "") ? "video" : "image",
+            title: t(project.title),
+            desc: t(project.description),
+            url: project.image || "",
+            span: PROJECT_SPANS[project.size] || PROJECT_SPANS.small,
+            link: project.link,
+            tags: project.tags,
+          }))}
+        />
       </section>
 
       {/* Contact */}
