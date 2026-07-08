@@ -89,6 +89,13 @@ body {
   font-family: var(--font-cairo), var(--font-geist-sans), system-ui, sans-serif;
 }
 
+/* Zain covers Arabic only (no Latin letters or western digits), so it leads
+   the stack in Arabic mode and anything it lacks falls back to Cairo. */
+html[lang="ar"] body {
+  font-family: var(--font-zain), var(--font-cairo), var(--font-geist-sans),
+    system-ui, sans-serif;
+}
+
 /* ---------------------------------- */
 /* Keyframes (hero 3D animation)       */
 /* ---------------------------------- */
