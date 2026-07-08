@@ -20,7 +20,7 @@ export function GalleryScene({ content }: { content: SiteContent }) {
   const headingOpacity = useTransform(scrollYProgress, [0, 0.06], [0, 1]);
 
   return (
-    <div ref={ref} id="projects" className="relative h-[360vh] bg-background">
+    <div ref={ref} id="projects" className="relative h-[270vh] bg-background">
       <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden px-2">
         <motion.div
           style={{ opacity: fadeOut }}

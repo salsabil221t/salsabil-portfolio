@@ -66,15 +66,16 @@ export function AboutScene({ content }: { content: SiteContent }) {
   const headingY = useTransform(scrollYProgress, [0, 0.08], [30, 0]);
 
   const highlights = content.about.highlights;
-  const bandStart = 0.5;
+  // pick up right where typing ends — no idle scroll before the highlights start
+  const bandStart = 0.42;
   const bandWidth = highlights.length
-    ? 0.42 / highlights.length
-    : 0.42;
+    ? (1 - bandStart) / highlights.length
+    : 1 - bandStart;
 
   const doneTyping = chars >= body.length;
 
   return (
-    <div ref={ref} id="about" className="relative h-[320vh] bg-background">
+    <div ref={ref} id="about" className="relative h-[230vh] bg-background">
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-4">
         <motion.h2
           style={{ opacity: headingOpacity, y: headingY }}

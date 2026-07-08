@@ -94,7 +94,8 @@ export function SkillsScene({ content }: { content: SiteContent }) {
 
   const skills = content.skills.items;
   const bandStart = 0.08;
-  const bandTotal = 0.62;
+  // ends exactly where the last card starts growing (0.78) — no idle gap
+  const bandTotal = 0.78 - bandStart;
   const width = skills.length ? bandTotal / skills.length : bandTotal;
 
   // fades in at the start, fades away while the last card grows
@@ -106,7 +107,7 @@ export function SkillsScene({ content }: { content: SiteContent }) {
   const headingY = useTransform(scrollYProgress, [0, 0.07], [30, 0]);
 
   return (
-    <div ref={ref} id="skills" className="relative h-[320vh] bg-background">
+    <div ref={ref} id="skills" className="relative h-[230vh] bg-background">
       <div className="sticky top-0 flex h-screen flex-col items-center justify-center overflow-hidden px-4">
         <motion.h2
           style={{ opacity: headingOpacity, y: headingY }}

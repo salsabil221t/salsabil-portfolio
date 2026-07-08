@@ -20,7 +20,7 @@ export function HeroScene({ content }: { content: SiteContent }) {
   const copyY = useTransform(scrollYProgress, [0, 0.22], [0, 40]);
 
   return (
-    <div ref={ref} id="home" className="relative h-[260vh]">
+    <div ref={ref} id="home" className="relative h-[190vh]">
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* blend the hero's dark backdrop into the page background */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-44 bg-gradient-to-b from-transparent to-background" />
