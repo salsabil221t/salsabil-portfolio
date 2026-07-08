@@ -120,13 +120,16 @@ html[lang="ar"] body {
   }
 }
 
-@keyframes filter-animation {
+/* gentle tonal "breathing" for the scene — brightness/saturation only, so
+   the walls stay within the brand palette instead of hue-drifting into
+   purple/pink. */
+@keyframes scene-glow {
   0%,
   100% {
-    filter: hue-rotate(0deg);
+    filter: brightness(0.97) saturate(1);
   }
   50% {
-    filter: hue-rotate(100deg);
+    filter: brightness(1.08) saturate(1.15);
   }
 }
 
@@ -204,7 +207,8 @@ html[lang="ar"] body {
   flex-shrink: 0;
 }
 
-/* the framed scene — its hue slowly shifts (blue → purple → pink).
+/* the framed scene — a gentle brightness/saturation breathing, no hue
+   drift, so it always reads as the brand palette (navy/blue/sky/mint).
    The 3D scene lives fully inside .container, so filtering here is safe. */
 .hero-section .container-full {
   position: relative;
@@ -215,10 +219,10 @@ html[lang="ar"] body {
   background: #020308;
   box-shadow: 0 40px 140px -30px rgba(40, 53, 147, 0.55),
     0 0 0 1px rgba(146, 203, 221, 0.08);
-  animation: filter-animation 26s ease-in-out infinite;
+  animation: scene-glow 26s ease-in-out infinite;
 }
 
-/* soft light bloom over the scene */
+/* soft light bloom over the scene, in blue/navy */
 .hero-section .animated.hue {
   position: absolute;
   inset: 0;
@@ -226,10 +230,10 @@ html[lang="ar"] body {
   pointer-events: none;
   background: radial-gradient(
       70% 55% at 50% 38%,
-      rgba(150, 170, 255, 0.14) 0%,
+      rgba(66, 114, 215, 0.16) 0%,
       transparent 70%
     ),
-    radial-gradient(120% 45% at 50% 108%, rgba(6, 8, 20, 0.8) 0%, transparent 60%);
+    radial-gradient(120% 45% at 50% 108%, rgba(40, 53, 147, 0.8) 0%, transparent 60%);
   mix-blend-mode: screen;
 }
 
@@ -293,18 +297,21 @@ html[lang="ar"] body {
   display: none;
 }
 
-/* walls */
+/* walls — a lit "tube" of the brand palette: dark at the seams, glowing
+   through navy → blue → sky and brightest at mint in the middle. */
 .hero-section .face.back,
 .hero-section .face.left,
 .hero-section .face.right {
   background: linear-gradient(
     180deg,
     #05060f 0%,
-    #6a77c4 14%,
-    #ccd5fb 38%,
-    #e4e9fe 52%,
-    #ccd5fb 66%,
-    #5b68b5 86%,
+    var(--navy) 12%,
+    var(--blue) 30%,
+    var(--sky) 45%,
+    var(--mint) 50%,
+    var(--sky) 55%,
+    var(--blue) 70%,
+    var(--navy) 88%,
     #04050d 100%
   );
 }
@@ -334,22 +341,22 @@ html[lang="ar"] body {
   transform: rotateX(-90deg) translateZ(-281px);
   background: radial-gradient(
       55% 55% at 50% 50%,
-      rgba(125, 145, 230, 0.16) 0%,
+      rgba(66, 114, 215, 0.18) 0%,
       transparent 70%
     ),
     #05060f;
-  border: 3px solid rgba(214, 222, 255, 0.9);
-  box-shadow: 0 0 34px rgba(150, 170, 255, 0.75),
-    inset 0 0 34px rgba(150, 170, 255, 0.45);
+  border: 3px solid rgba(208, 230, 227, 0.9);
+  box-shadow: 0 0 34px rgba(146, 203, 221, 0.75),
+    inset 0 0 34px rgba(146, 203, 221, 0.45);
 }
 
 .hero-section .face.top::before,
 .hero-section .face.top::after {
   content: "";
   position: absolute;
-  border: 3px solid rgba(214, 222, 255, 0.85);
-  box-shadow: 0 0 30px rgba(150, 170, 255, 0.7),
-    inset 0 0 30px rgba(150, 170, 255, 0.4);
+  border: 3px solid rgba(208, 230, 227, 0.85);
+  box-shadow: 0 0 30px rgba(146, 203, 221, 0.7),
+    inset 0 0 30px rgba(146, 203, 221, 0.4);
 }
 
 .hero-section .face.top::before {
@@ -366,13 +373,13 @@ html[lang="ar"] body {
   transform: rotateX(90deg) translateZ(-281px);
   background: radial-gradient(
       42% 30% at 50% 8%,
-      rgba(190, 205, 255, 0.5) 0%,
+      rgba(146, 203, 221, 0.5) 0%,
       transparent 75%
     ),
     linear-gradient(
       180deg,
-      rgba(150, 165, 240, 0.38) 0%,
-      rgba(70, 82, 160, 0.16) 22%,
+      rgba(66, 114, 215, 0.38) 0%,
+      rgba(40, 53, 147, 0.16) 22%,
       rgba(6, 8, 20, 0.92) 58%,
       #020308 100%
     );
