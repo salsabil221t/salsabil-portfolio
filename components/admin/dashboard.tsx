@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
@@ -11,9 +11,12 @@ import {
   Plus,
   Save,
   Trash2,
+  Upload,
+  X,
 } from "lucide-react";
 import type { Localized, ProjectSize, SiteContent } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { resizeImageFile } from "@/lib/image-resize";
 
 const PROJECT_SIZE_OPTIONS: { value: ProjectSize; label: string }[] = [
   { value: "small", label: "صغير (1×2)" },
@@ -78,6 +81,92 @@ function LocalizedInput({
           />
         )
       )}
+    </div>
+  );
+}
+
+/** URL field with an "upload from device" option — files are resized and
+    stored as data URLs, so no separate file host is needed. */
+function ImageInput({
+  value,
+  onChange,
+  urlPlaceholder = "https://...",
+}: {
+  value: string;
+  onChange: (next: string) => void;
+  urlPlaceholder?: string;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState("");
+  const isUploaded = value.startsWith("data:");
+
+  async function handleFile(file: File | undefined) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      setError("لازم تختاري ملف صورة");
+      return;
+    }
+    setError("");
+    try {
+      onChange(await resizeImageFile(file));
+    } catch {
+      setError("تعذّر تحميل الصورة، جربي صورة تانية");
+    }
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        {isUploaded ? (
+          <div className="flex-1 rounded-xl border border-input bg-muted px-3 py-2 text-sm text-muted-foreground">
+            صورة مرفوعة من جهازك
+          </div>
+        ) : (
+          <input
+            dir="ltr"
+            value={value}
+            placeholder={urlPlaceholder}
+            onChange={(e) => onChange(e.target.value)}
+            className={cn(inputClass, "flex-1")}
+          />
+        )}
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-xl border border-dashed border-accent/60 px-3 py-2 text-sm font-semibold text-accent transition-colors hover:bg-accent/10"
+        >
+          <Upload className="h-4 w-4" /> رفع صورة
+        </button>
+        <input
+          ref={inputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            handleFile(e.target.files?.[0]);
+            e.target.value = "";
+          }}
+        />
+      </div>
+      {error ? <p className="text-xs text-red-500">{error}</p> : null}
+      {value ? (
+        <div className="relative inline-block">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={value}
+            alt=""
+            className="h-20 w-32 rounded-lg border border-border object-cover"
+          />
+          <button
+            type="button"
+            onClick={() => onChange("")}
+            aria-label="حذف الصورة"
+            className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white shadow"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
@@ -297,29 +386,23 @@ export function Dashboard({ initialContent }: { initialContent: SiteContent }) {
             </div>
             <div className="grid gap-4 md:grid-cols-2">
               <Field
-                label="رابط صورة البنت"
-                hint="اتركيه كما هو للسيلويت الافتراضي، أو ضعي رابط صورة أخرى"
+                label="صورة البنت"
+                hint="ارفعي صورة من جهازك، أو الصقي رابط صورة أخرى"
               >
-                <input
-                  dir="ltr"
+                <ImageInput
                   value={content.hero.girlImageUrl}
-                  onChange={(e) =>
-                    update((d) => (d.hero.girlImageUrl = e.target.value))
-                  }
-                  className={inputClass}
+                  onChange={(v) => update((d) => (d.hero.girlImageUrl = v))}
                 />
               </Field>
               <Field
-                label="رابط صورة الخلفية (اختياري)"
-                hint="اتركيه فارغًا لاستخدام التدرج اللوني"
+                label="صورة الخلفية (اختياري)"
+                hint="اتركيها فارغة لاستخدام التدرج اللوني"
               >
-                <input
-                  dir="ltr"
+                <ImageInput
                   value={content.hero.backgroundImageUrl}
-                  onChange={(e) =>
-                    update((d) => (d.hero.backgroundImageUrl = e.target.value))
+                  onChange={(v) =>
+                    update((d) => (d.hero.backgroundImageUrl = v))
                   }
-                  className={inputClass}
                 />
               </Field>
             </div>
@@ -480,19 +563,14 @@ export function Dashboard({ initialContent }: { initialContent: SiteContent }) {
                   </Field>
                   <div className="grid gap-4 md:grid-cols-2">
                     <Field
-                      label="رابط الصورة / الفيديو"
-                      hint="صورة، أو رابط .mp4 لفيديو يتشغّل تلقائيًا"
+                      label="صورة / فيديو المشروع"
+                      hint="ارفعي صورة من جهازك، أو الصقي رابط صورة أو رابط .mp4 لفيديو يتشغّل تلقائيًا"
                     >
-                      <input
-                        dir="ltr"
+                      <ImageInput
                         value={project.image}
-                        placeholder="https://..."
-                        onChange={(e) =>
-                          update(
-                            (d) => (d.projects.items[i].image = e.target.value)
-                          )
+                        onChange={(v) =>
+                          update((d) => (d.projects.items[i].image = v))
                         }
-                        className={inputClass}
                       />
                     </Field>
                     <Field label="مقاس القطعة في الجاليري">
