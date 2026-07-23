@@ -8,9 +8,17 @@ const CONTENT_KEY = "site-content";
 const LOCAL_FILE = path.join(process.cwd(), "content", "site-content.json");
 
 function getRedis(): Redis | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
+  // Different Vercel/Upstash integration flows name these differently
+  // depending on the custom prefix chosen at connect time — check every
+  // variant rather than assuming one naming scheme.
+  const url =
+    process.env.UPSTASH_REDIS_REST_URL ||
+    process.env.KV_REST_API_URL ||
+    process.env.UPSTASH_REDIS_KV_REST_API_URL;
   const token =
-    process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
+    process.env.UPSTASH_REDIS_REST_TOKEN ||
+    process.env.KV_REST_API_TOKEN ||
+    process.env.UPSTASH_REDIS_KV_REST_API_TOKEN;
   if (!url || !token) return null;
   return new Redis({ url, token });
 }
