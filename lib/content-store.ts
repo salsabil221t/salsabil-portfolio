@@ -11,11 +11,15 @@ function getRedis(): Redis | null {
   // Different Vercel/Upstash integration flows name these differently
   // depending on the custom prefix chosen at connect time — check every
   // variant rather than assuming one naming scheme.
+  // The V2 pair comes first: the original UPSTASH_REDIS_KV_* database was
+  // uninstalled, but its stale variables still sit in the project.
   const url =
+    process.env.UPSTASH_REDIS_V2_KV_REST_API_URL ||
     process.env.UPSTASH_REDIS_REST_URL ||
     process.env.KV_REST_API_URL ||
     process.env.UPSTASH_REDIS_KV_REST_API_URL;
   const token =
+    process.env.UPSTASH_REDIS_V2_KV_REST_API_TOKEN ||
     process.env.UPSTASH_REDIS_REST_TOKEN ||
     process.env.KV_REST_API_TOKEN ||
     process.env.UPSTASH_REDIS_KV_REST_API_TOKEN;
