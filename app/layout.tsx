@@ -4,17 +4,12 @@ import localFont from "next/font/local";
 import { Providers } from "@/components/providers";
 import "./globals.css";
 
-// Zain (provided by Salsabil): Arabic-only glyphs, four real weight designs.
-// The TTF metadata mislabels every file as 400, so weights are declared here.
-// Ranges make CSS weight-matching sensible (e.g. bold 700 → the 600 design).
+// Milan Display Black Swashes (provided by Salsabil): Arabic + Latin + digits,
+// a single Black weight. The range makes it serve every CSS weight so the
+// browser never fakes a bold on top of it.
 const zain = localFont({
   variable: "--font-zain",
-  src: [
-    { path: "./fonts/zain-100.woff2", weight: "100 200" },
-    { path: "./fonts/zain-300.woff2", weight: "300 500" },
-    { path: "./fonts/zain-600.woff2", weight: "600 700" },
-    { path: "./fonts/zain-800.woff2", weight: "800 900" },
-  ],
+  src: [{ path: "./fonts/milan-black.woff2", weight: "100 900" }],
 });
 
 const cairo = Cairo({

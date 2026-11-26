@@ -79,7 +79,7 @@
   --color-blue: var(--blue);
   --color-sky: var(--sky);
   --color-mint: var(--mint);
-  --font-sans: var(--font-cairo), var(--font-geist-sans), system-ui, sans-serif;
+  --font-sans: var(--font-zain), var(--font-cairo), var(--font-geist-sans), system-ui, sans-serif;
 }
 
 * {
@@ -93,11 +93,11 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-cairo), var(--font-geist-sans), system-ui, sans-serif;
+  font-family: var(--font-zain), var(--font-cairo), var(--font-geist-sans),
+    system-ui, sans-serif;
 }
 
-/* Zain covers Arabic only (no Latin letters or western digits), so it leads
-   the stack in Arabic mode and anything it lacks falls back to Cairo. */
+/* Milan covers Arabic + Latin; Cairo/Geist only catch glyphs it lacks. */
 html[lang="ar"] body {
   font-family: var(--font-zain), var(--font-cairo), var(--font-geist-sans),
     system-ui, sans-serif;
