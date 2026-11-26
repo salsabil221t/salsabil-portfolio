@@ -284,8 +284,8 @@ const GalleryModal = ({
         className="fixed z-50 left-1/2 bottom-4 -translate-x-1/2 touch-none"
       >
         <motion.div
-          className="relative rounded-xl bg-sky-400/20 backdrop-blur-xl
-                   border border-blue-400/30 shadow-lg
+          className="relative rounded-xl bg-sky/20 backdrop-blur-xl
+                   border border-blue/30 shadow-lg
                    cursor-grab active:cursor-grabbing"
         >
           <div className="flex items-center -space-x-2 px-3 py-2">

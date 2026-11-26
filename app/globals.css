@@ -4,52 +4,59 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ---------------------------------- */
-/* Brand palette                       */
-/*  navy  #283593                      */
-/*  blue  #4272D7                      */
-/*  sky   #92CBDD                      */
-/*  mint  #D0E6E3                      */
+/* Brand palette — v2 (pastel set supplied by Salsabil)      */
+/*  navy  #4D6787  — slate blue-grey  (was deep indigo)      */
+/*  blue  #F599C6  — soft pink        (was jewel sapphire)   */
+/*  sky   #7DCCAD  — mint green       (was electric aqua)    */
+/*  mint  #FFEA88  — pale yellow      (was muted sage)       */
+/*  accent #F599C6 — same pink as --blue, reused everywhere  */
+/*                   a CTA/highlight/focus color is needed.   */
+/* Names kept from v1 so no component file needs to change —  */
+/* only the values moved. Order below still runs dark → light */
+/* so the hero wall gradient (navy→blue→sky→mint) stays a      */
+/* smooth glow instead of banding.                             */
 /* ---------------------------------- */
 
 :root {
-  --navy: #283593;
-  --blue: #4272d7;
-  --sky: #92cbdd;
-  --mint: #d0e6e3;
+  --navy: #4d6787;
+  --blue: #f599c6;
+  --sky: #7dccad;
+  --mint: #ffea88;
+  --gold: #f599c6;
 
-  --background: #f6fbfa;
-  --foreground: #1c2452;
+  --background: #f7f8f6;
+  --foreground: #1b1730;
   --card: #ffffff;
-  --card-foreground: #1c2452;
-  --primary: #283593;
-  --primary-foreground: #f6fbfa;
-  --secondary: #d0e6e3;
-  --secondary-foreground: #1c2452;
-  --muted: #e3f0ee;
-  --muted-foreground: #4a5578;
-  --accent: #4272d7;
-  --accent-foreground: #ffffff;
-  --border: #c3dcd8;
-  --input: #c3dcd8;
-  --ring: #4272d7;
+  --card-foreground: #1b1730;
+  --primary: var(--navy);
+  --primary-foreground: #f7f8f6;
+  --secondary: var(--mint);
+  --secondary-foreground: #1b1730;
+  --muted: #eef2f0;
+  --muted-foreground: #4b5170;
+  --accent: var(--gold);
+  --accent-foreground: #1b1730;
+  --border: #d8ded9;
+  --input: #d8ded9;
+  --ring: var(--gold);
 }
 
 .dark {
-  --background: #0a0e24;
-  --foreground: #e8f4f2;
-  --card: #121737;
-  --card-foreground: #e8f4f2;
-  --primary: #92cbdd;
-  --primary-foreground: #0a0e24;
-  --secondary: #1c2452;
-  --secondary-foreground: #d0e6e3;
-  --muted: #161c42;
-  --muted-foreground: #9fb2c8;
-  --accent: #4272d7;
-  --accent-foreground: #ffffff;
-  --border: #232b5c;
-  --input: #232b5c;
-  --ring: #92cbdd;
+  --background: #0b0a18;
+  --foreground: #f1ede4;
+  --card: #15132a;
+  --card-foreground: #f1ede4;
+  --primary: var(--sky);
+  --primary-foreground: #0b0a18;
+  --secondary: var(--navy);
+  --secondary-foreground: var(--mint);
+  --muted: #171633;
+  --muted-foreground: #a7acc7;
+  --accent: #f599c6;
+  --accent-foreground: #0b0a18;
+  --border: #262247;
+  --input: #262247;
+  --ring: #f599c6;
 }
 
 @theme inline {
@@ -173,10 +180,10 @@ html[lang="ar"] body {
 @keyframes girl-glow {
   0%,
   100% {
-    filter: drop-shadow(0 0 14px rgba(146, 203, 221, 0.3));
+    filter: drop-shadow(0 0 14px rgba(125, 204, 173, 0.3));
   }
   50% {
-    filter: drop-shadow(0 0 28px rgba(66, 114, 215, 0.5));
+    filter: drop-shadow(0 0 28px rgba(245, 153, 198, 0.5));
   }
 }
 
@@ -217,8 +224,8 @@ html[lang="ar"] body {
   overflow: hidden;
   border-radius: 26px;
   background: #020308;
-  box-shadow: 0 40px 140px -30px rgba(40, 53, 147, 0.55),
-    0 0 0 1px rgba(146, 203, 221, 0.08);
+  box-shadow: 0 40px 140px -30px rgba(77, 103, 135, 0.55),
+    0 0 0 1px rgba(125, 204, 173, 0.08);
   animation: scene-glow 26s ease-in-out infinite;
 }
 
@@ -230,10 +237,10 @@ html[lang="ar"] body {
   pointer-events: none;
   background: radial-gradient(
       70% 55% at 50% 38%,
-      rgba(66, 114, 215, 0.16) 0%,
+      rgba(245, 153, 198, 0.16) 0%,
       transparent 70%
     ),
-    radial-gradient(120% 45% at 50% 108%, rgba(40, 53, 147, 0.8) 0%, transparent 60%);
+    radial-gradient(120% 45% at 50% 108%, rgba(77, 103, 135, 0.8) 0%, transparent 60%);
   mix-blend-mode: screen;
 }
 
@@ -341,22 +348,22 @@ html[lang="ar"] body {
   transform: rotateX(-90deg) translateZ(-281px);
   background: radial-gradient(
       55% 55% at 50% 50%,
-      rgba(66, 114, 215, 0.18) 0%,
+      rgba(245, 153, 198, 0.18) 0%,
       transparent 70%
     ),
     #05060f;
-  border: 3px solid rgba(208, 230, 227, 0.9);
-  box-shadow: 0 0 34px rgba(146, 203, 221, 0.75),
-    inset 0 0 34px rgba(146, 203, 221, 0.45);
+  border: 3px solid rgba(255, 234, 136, 0.9);
+  box-shadow: 0 0 34px rgba(125, 204, 173, 0.75),
+    inset 0 0 34px rgba(125, 204, 173, 0.45);
 }
 
 .hero-section .face.top::before,
 .hero-section .face.top::after {
   content: "";
   position: absolute;
-  border: 3px solid rgba(208, 230, 227, 0.85);
-  box-shadow: 0 0 30px rgba(146, 203, 221, 0.7),
-    inset 0 0 30px rgba(146, 203, 221, 0.4);
+  border: 3px solid rgba(255, 234, 136, 0.85);
+  box-shadow: 0 0 30px rgba(125, 204, 173, 0.7),
+    inset 0 0 30px rgba(125, 204, 173, 0.4);
 }
 
 .hero-section .face.top::before {
@@ -373,13 +380,13 @@ html[lang="ar"] body {
   transform: rotateX(90deg) translateZ(-281px);
   background: radial-gradient(
       42% 30% at 50% 8%,
-      rgba(146, 203, 221, 0.5) 0%,
+      rgba(125, 204, 173, 0.5) 0%,
       transparent 75%
     ),
     linear-gradient(
       180deg,
-      rgba(66, 114, 215, 0.38) 0%,
-      rgba(40, 53, 147, 0.16) 22%,
+      rgba(245, 153, 198, 0.38) 0%,
+      rgba(77, 103, 135, 0.16) 22%,
       rgba(6, 8, 20, 0.92) 58%,
       #020308 100%
     );
@@ -401,9 +408,9 @@ html[lang="ar"] body {
 }
 
 .hero-section .face.text p span {
-  color: #e0335c;
+  color: #f599c6;
   font-weight: 800;
-  text-shadow: 0 0 26px rgba(224, 51, 92, 0.5);
+  text-shadow: 0 0 26px rgba(245, 153, 198, 0.55);
 }
 
 /* All three walls run the same animation at the same speed; each wall's
